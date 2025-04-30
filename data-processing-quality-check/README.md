@@ -58,3 +58,7 @@ Note:. Formula for zenith angle @
 * GHI = DHI + DNI cos@  
 * BHI = DNI cos@  
 * DNI = BNI  
+
+## Commands
+For conversion to python from notebook  
+`jupyter nbconvert .\data-processing-quality-check\data-processing-v2.ipynb --to python`
