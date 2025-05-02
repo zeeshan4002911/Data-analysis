@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
+# In[8]:
 
 
 import pandas as pd
@@ -9,7 +9,7 @@ import numpy as np
 import os
 
 
-# In[2]:
+# In[9]:
 
 
 input_file_name = 'data-v2.xlsx'
@@ -19,7 +19,7 @@ data_DF = pd.read_excel(file_path, usecols=read_columns)
 data_DF.head()
 
 
-# In[3]:
+# In[15]:
 
 
 # data_DF.head()
@@ -31,7 +31,7 @@ if data_DF.isnull().values.any():
 # data_DF.describe()
 
 
-# In[4]:
+# In[16]:
 
 
 # Calculation for I0n
@@ -57,24 +57,24 @@ data_DF['G0h'] = data_DF['I0n'] * data_DF['COS_ZENITH']
 data_DF.describe()
 
 
-# In[5]:
+# In[17]:
 
 
 # K-tests
 k_test_condition_1 = (data_DF['GHI'] > 50) & (data_DF['ZENITH_ANGLE'] < 75) & (data_DF['Kd'] < 1.05)
 k_test_condition_2 = (data_DF['GHI'] > 50) & (data_DF['ZENITH_ANGLE'] > 75) & (data_DF['Kd'] < 1.10)
-k_test_condition_3 = (data_DF['Kn'] < 0.8) & (data_DF['Kn'] > 0)
+k_test_condition_3 = (data_DF['Kn'] < 0.8)
 k_test_condition_4 = (data_DF['Kd'] < 0.96) & (data_DF['Kt'] > 0.6)
 
 data_DF['k_test'] = np.where(
-    k_test_condition_1 | k_test_condition_2 | k_test_condition_3 | k_test_condition_4,
+    (k_test_condition_1 | k_test_condition_2 ) & k_test_condition_3 & k_test_condition_4,
     'Passed',
     'Failed'
 )
 data_DF.head()
 
 
-# In[6]:
+# In[18]:
 
 
 #  Individual Limits Test (ILT)
@@ -85,21 +85,21 @@ ILT_condition_4 = (data_DF['DHI'] < 0.8 * data_DF['G0h'])
 ILT_condition_5 = (data_DF['GHI'] - data_DF['DHI'] < data_DF['G0h'])
 
 data_DF['individual_limit_test'] = np.where(
-    ILT_condition_1 | ILT_condition_2 | ILT_condition_3 | ILT_condition_4 | ILT_condition_5,
+    ILT_condition_1 & ILT_condition_2 & ILT_condition_3 & ILT_condition_4 & ILT_condition_5,
     'Passed',
     'Failed'
 )
 data_DF.head()
 
 
-# In[7]:
+# In[19]:
 
 
 # Night-Time Zero Testing
 filter_condition_1 = data_DF['GHI'] > 5
 filter_condition_2 = data_DF['ZENITH_ANGLE'] < 85
 data_DF['night_time_test'] = np.where(
-    filter_condition_1 | filter_condition_2,
+    filter_condition_1 & filter_condition_2,
     'Passed',
     'Failed'
 )
