@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[15]:
+# In[1]:
 
 
 import pandas as pd
@@ -9,7 +9,7 @@ import numpy as np
 import os
 
 
-# In[ ]:
+# In[2]:
 
 
 input_file_name = 'data-v2.xlsx'
@@ -19,7 +19,7 @@ data_DF = pd.read_excel(file_path, usecols=read_columns)
 data_DF.head()
 
 
-# In[ ]:
+# In[3]:
 
 
 # data_DF.head()
@@ -31,7 +31,7 @@ if data_DF.isnull().values.any():
 # data_DF.describe()
 
 
-# In[ ]:
+# In[4]:
 
 
 # Calculation for I0n
@@ -41,7 +41,7 @@ if data_DF.isnull().values.any():
 # n is the day of the year (from the date in your period column)
 
 data_DF['I0n'] = 1367 * (1 + 0.033 * np.cos(2 * np.pi * data_DF['DAY_OF_YEAR'] / 365))
-data_DF['COS_ZENITH'] = np.cos(data_DF['ZENITH_ANGLE'])
+data_DF['COS_ZENITH'] = np.cos(np.deg2rad(data_DF['ZENITH_ANGLE']))
 data_DF.rename(columns={
     'SOLAR_GHI_GROUND_01_AVG': 'GHI', 
     'SOLAR_DIRECTRADIATION_GROUND_01_AVG': 'DNI', 
@@ -57,7 +57,7 @@ data_DF['G0h'] = data_DF['I0n'] * data_DF['COS_ZENITH']
 data_DF.describe()
 
 
-# In[ ]:
+# In[5]:
 
 
 # K-tests
@@ -74,7 +74,7 @@ data_DF['k_test'] = np.where(
 data_DF.head()
 
 
-# In[ ]:
+# In[6]:
 
 
 #  Individual Limits Test (ILT)
@@ -92,7 +92,7 @@ data_DF['individual_limit_test'] = np.where(
 data_DF.head()
 
 
-# In[ ]:
+# In[7]:
 
 
 # Night-Time Zero Testing
